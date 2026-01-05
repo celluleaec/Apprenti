@@ -52,5 +52,5 @@ class ApprentiReportWizard(models.TransientModel):
                 'apprenti_semestre_map': apprenti_semestre_map,
                 }
 
-        return self.env.ref('apprenti.action_report_apprenti_xlsx').report_action(apprentis.ids)
+        return self.env.ref('Apprentis.action_report_apprenti_xlsx').report_action(apprentis.ids)
         
