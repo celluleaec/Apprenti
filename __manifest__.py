@@ -12,10 +12,7 @@
         "data/data_apprenti.xml",
         "wizard/Edit_Montant_mois_view.xml",
         "wizard/Apprenti_report_wizard_view.xml",
-        "views/structure_view.xml",
         "views/semestre_view.xml",
-        "views/etablissement_view.xml",
-        "views/station_view.xml",
         "views/configuration_view.xml",
         'reports/apprenti_xlsx_report.xml'
         

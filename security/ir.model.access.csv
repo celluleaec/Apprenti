@@ -1,7 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_direction,access.hr.direction,model_hr_direction,,1,1,1,1
-access_trainee_station,access.trainee.station,model_trainee_station,,1,1,1,1
-access_trainee_establishment,access.trainee.establishment,model_trainee_establishment,,1,1,1,1
 access_apprenti,access.apprenti,model_apprenti,,1,1,1,1
 access_semestre,access.semestre,model_semestre,,1,1,1,1
 access_semestre_mois,access.semestre.mois,model_semestre_mois,,1,1,1,1
