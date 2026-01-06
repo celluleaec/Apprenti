@@ -30,13 +30,13 @@ class Apprenti(models.Model):
     string="Photo",max_width=1024,max_height=1024,tracking=True)
     speciality = fields.Char(string="Spécialité",tracking=True)
     # Structure : réference de structure
-    structure_id = fields.Many2one(comodel_name="structure",string="Structure",required=True,tracking=True)
+    structure_id = fields.Many2one(comodel_name="hr.direction",string="Structure",required=True,tracking=True)
     # departement : réference de departement
     department_id = fields.Many2one(comodel_name="hr.department",string="Departement",required=True,tracking=True)
     # station : réference de station
-    station_id = fields.Many2one(comodel_name="station",string="Station",tracking=True)
-    # etablissement : réference de etablissement
-    etablissement_id = fields.Many2one(comodel_name="etablissement",string="Etablissement",required=True,tracking=True)
+    station_id = fields.Many2one(comodel_name="trainee.station",string="Station",tracking=True)
+    # etablissement : réference de etablissements
+    etablissement_id = fields.Many2one(comodel_name="trainee.establishment",string="Etablissement",required=True,tracking=True)
     # Nom maitre d'apprentisage: réference de l'employe
     maitre_id = fields.Many2one(comodel_name="hr.employee",string="Maitre D'apprentisage",required=True,tracking=True)
     #L'etat de l'apprenti

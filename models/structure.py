@@ -4,7 +4,7 @@ from odoo.exceptions import UserError
 
 #we have added this module just for testing
 class Structure(models.Model):
-    _name = "structure"
+    _name = "hr.direction"
 
     _description = "Structeur de l'ADC"
     

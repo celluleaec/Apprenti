@@ -3,7 +3,7 @@ from odoo.exceptions import UserError
 
 #we have added this module just for testing
 class Etablissemen(models.Model):
-    _name = "etablissement"
+    _name = "trainee.establishment"
 
     _description = "etablissement de l'ADC"
     

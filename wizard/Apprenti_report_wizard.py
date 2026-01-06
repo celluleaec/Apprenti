@@ -8,7 +8,7 @@ class ApprentiReportWizard(models.TransientModel):
     date_from = fields.Date(string="Date début (Contrat)")
     date_to = fields.Date(string="Date fin (Contrat)")
     
-    structure_id = fields.Many2one('structure', string="Structure")
+    structure_id = fields.Many2one('hr.direction', string="Structure")
     department_id = fields.Many2one('hr.department', string="Département") 
 
     def action_print_report(self):

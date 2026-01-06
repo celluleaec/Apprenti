@@ -4,9 +4,8 @@ from odoo.exceptions import UserError
 
 #we have added this module just for testing
 class Station(models.Model):
-    _name = "station"
+    _name = "trainee.station"
 
     _description = "station de l'ADC"
     
     name = fields.Char(string="station", required=True )
-   
