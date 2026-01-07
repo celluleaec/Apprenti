@@ -34,7 +34,7 @@
         id="menu_apprenti_report_wizard_root"
         name="Reports"
         parent="menu_apprenti_root"
-        sequence="10"/>
+        sequence="15"/>
 
     <menuitem id="menu_apprenti_report_wizard"
               name="Rapport Excel"
