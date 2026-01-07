@@ -10,14 +10,15 @@
         "security/ir.model.access.csv",
         "views/apprenti_view.xml",
         "data/data_apprenti.xml",
-        "wizard/Edit_Montant_mois_view.xml",
         "wizard/Apprenti_report_wizard_view.xml",
+        "wizard/Apprenti_resilie_wizard_view.xml",
         "views/semestre_view.xml",
         "views/configuration_view.xml",
         'reports/apprenti_xlsx_report.xml'
         
         
     ],
+    "web_icon": "Apprentis,static/description/icon.png",
     "installable": True,
     "application": True,
 }
