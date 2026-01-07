@@ -9,9 +9,6 @@ class Apprenti(models.Model):
     _description = "apprenti de l'ADC"
     _order = "matricule desc"
 
-
-    
-    
     # matricule de l'apprenti , va genére automatiquement par le sequenceur
     matricule = fields.Char(string="Matricule" , readonly=True
                             ,copy=False,default=lambda self:_('Nouveau')) 
@@ -43,7 +40,8 @@ class Apprenti(models.Model):
     state = fields.Selection([
         ('pas_encore', 'Ouvert'),
         ('en_cours', 'En Cours'),
-        ('termine', 'Terminé')
+        ('termine', 'Terminé'),
+        ('resilie', 'Resilié')
     ], string="Etat" ,compute="calcul_etat", store=True, readonly=True,tracking=True)
     #Début de l'apprentisage
     debut_apprendre = fields.Date(string="Début de l'apprentisage" ,required=True,tracking=True)
@@ -53,7 +51,10 @@ class Apprenti(models.Model):
     pv_installation = fields.Binary(string="PV d'installation",tracking=True)
     #Contrat
     contrat = fields.Binary(string="Contrat",tracking=True)
-
+    decision_maitre = fields.Binary(string="Décision du Maître",tracking=True)
+    resiliation_document = fields.Binary(string="Résiliation du contrat",tracking=True)
+    date_resiliation = fields.Date(string="Date de Résiliation",tracking=True)
+    #les semestres de l'apprenti
     semestre_ids = fields.One2many(comodel_name="semestre",inverse_name="apprenti_id",string="Semestres",readonly=True,tracking=True)
     semestre_display = fields.Char( string="Semestres",compute="_compute_semestre_display",store=False)
     semestre_count = fields.Integer(string="Semestre Count" , compute="_comput_semestre_count")
@@ -82,7 +83,7 @@ class Apprenti(models.Model):
         for rec in self:
 
             count_maitre = rec.env['apprenti'].search_count([('maitre_id','=',rec.maitre_id.id),('id','!=', rec.id)
-                                                             ,('state','=','en_cours')])
+                                                                ,('state','=','en_cours')])
             if count_maitre >= 2 :
                 raise ValidationError(_(f"Le maitre {rec.maitre_id.name} ne peut avoir que 2 apprentis ."))
         
@@ -100,6 +101,8 @@ class Apprenti(models.Model):
     def calcul_etat(self):
         today = date.today()
         for rec in self:
+            if rec.state == 'resilie':
+                continue
             if not rec.debut_apprendre or not rec.fin_apprendre:
                 rec.state = 'pas_encore'
             elif today < rec.debut_apprendre : 
@@ -161,3 +164,24 @@ class Apprenti(models.Model):
     def _compute_semestre_display(self):
         for rec in self:
             rec.semestre_display = ', '.join(rec.semestre_ids.mapped('semestre_type'))
+
+
+    def action_resilier(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Résilier Apprenti',
+            'res_model': 'apprenti.resilie.wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'target': 'new',  
+            'context': {
+                'default_apprenti_id': self.id,
+            }
+        }
+    
+    def write(self, vals):
+        for rec in self:
+            if rec.state == 'resilie' :
+                 raise UserError(_("Impossible de modifier les informations d'un apprenti résilié."))
+        return super(Apprenti, self).write(vals)

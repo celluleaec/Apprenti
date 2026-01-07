@@ -26,6 +26,7 @@
                 <filter name="state" string="Ouvert" domain="[('state', '=', 'pas_encore')]" />
                 <filter name="state" string="En Cours" domain="[('state', '=', 'en_cours')]" />
                 <filter name="state" string="Terminé" domain="[('state', '=', 'termine')]" />
+                <filter name="state" string="Resilié" domain="[('state', '=', 'resilie')]" />
 
                 <!-- trier -->
                 <group expand="1" string="Group By">
@@ -71,7 +72,7 @@
                             t-attf-class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
 
                             <div
-                                t-attf-class="h-100 #{record.state.raw_value == 'en_cours' ? 'bg-success' : record.state.raw_value == 'termine' ? 'bg-danger' : 'bg-info'}"
+                                t-attf-class="h-100 #{record.state.raw_value == 'en_cours' ? 'bg-success' : record.state.raw_value == 'termine' ? 'bg-danger' : record.state.raw_value == 'resilie' ? 'bg-secondary' : 'bg-info'}"
                                 style="width: 3px; position: absolute; right: 0; top: 0; bottom: 0;" />
                             <div class="o_kanban_image_fill_left d-none d-md-block"
                                 t-attf-style="background-image: url(#{kanban_image('apprenti', 'image_128', record.id.raw_value)})"
@@ -108,7 +109,8 @@
                                         <field name="state" widget="badge"
                                             decoration-info="state == 'pas_encore'"
                                             decoration-success="state == 'en_cours'"
-                                            decoration-danger="state == 'termine'" />
+                                            decoration-danger="state == 'termine'" 
+                                            decoration-muted="state == 'resilie'"/>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +148,7 @@
                 <field name="fin_apprendre" optional="show" />
                 <field name="state" optional="show" decoration-info="state == 'pas_encore'"
                     decoration-success=" state == 'en_cours' "
-                    decoration-danger="state == 'termine'"
+                    decoration-danger="state == 'termine'" decoration-muted="state == 'resilie'"
                     widget="badge" />
                 <field name="speciality" optional="hide" />
             </tree>
@@ -160,7 +162,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-
+                    <button id="action_resilier" string="Résilier" name="action_resilier" type="object"
+                        class="oe_highlight" attrs="{'invisible': [('state', '!=', 'en_cours')]}" />
+                        
                     <field name="state" widget="statusbar"
                         statusbar_visible="pas_encore,en_cours,termine" />
                 </header>
@@ -169,7 +173,7 @@
                     attrs="{'invisible' : [('state' , '=','pas_encore'),('state','=','en_cours')]}" /> -->
                     <div class="oe_button_box" name="button_box">
                         <button name="action_add_semestre" type="object"
-                            class="oe_stat_button" icon="fa-plus">
+                            class="oe_stat_button" icon="fa-plus" attrs="{'invisible': [('state', '=', 'resilie')]}">
                             <div class="o_stat_info">
                                 <span class="o_stat_text">Ajouter Semestre</span>
                             </div>
@@ -183,13 +187,14 @@
                         </button>
                     </div>
                     <field name="image_1920" widget="image" class="oe_avatar"
-                        options="{'preview_image': 'image_128'}" />
+                        options="{'preview_image': 'image_128'}" attrs="{'readonly': [('state', '=', 'resilie')]}" />
                     <div class="oe_title">
                         <h1>
+                            <span>Matricule: </span>
                             <field name="matricule" readonly="1" />
                         </h1>
                     </div>
-                    <group>
+                    <group attrs="{'readonly': [('state', '=', 'resilie')]}">
                         <group string="Information Personnelles">
                             <field name="prenom" />
                             <field name="nom" />
@@ -199,27 +204,28 @@
                             <field name="email" widget="email" />
                             <field name="adress" />
                         </group>
-                        <group string="Formation">
-                            <field name="etablissement_id" />
+                        <group string="Formation" attrs="{'readonly': [('state', '=', 'resilie')]}">
+                            <field name="etablissement_id" options="{'no_create': True, 'no_create_edit': True}"/>
                             <field name="speciality" />
-                            <field name="structure_id" />
-                            <field name="department_id" />
-                            <field name="station_id" />
-                            <field name="maitre_id" />
+                            <field name="structure_id" options="{'no_create': True, 'no_create_edit': True}" />
+                            <field name="department_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="station_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="maitre_id" options="{'no_create': True, 'no_create_edit': True}"/>
                             <field name="debut_apprendre" />
                             <field name="fin_apprendre" />
 
-                        </group>
-                        <group string="Document">
+                        </group >
+                        <group string="Document" attrs="{'readonly': [('state', '=', 'resilie')]}">
                             <field name="num_contrat" />
                             <field name="contrat" />
                             <field name="pv_installation" />
+                            <field name="decision_maitre" />
                         </group>
                     </group>
 
                     <notebook>
                         <page name="semestre_ids" string="Les Semestres">
-                            <field name="semestre_ids">
+                            <field name="semestre_ids" attrs="{'readonly': [('state', '=', 'resilie')]}">
                                 <tree  default_order="semestre_type desc">
                                     <field name="semestre_type" />
                                     <field name="debut_semestre" />
